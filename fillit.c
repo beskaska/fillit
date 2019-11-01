@@ -6,13 +6,13 @@
 /*   By: aimelda <aimelda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:59:46 by aimelda           #+#    #+#             */
-/*   Updated: 2019/10/31 21:27:15 by aimelda          ###   ########.fr       */
+/*   Updated: 2019/11/01 22:03:45 by aimelda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
 
-static t_pos	init_pos(t_pos *pos, t_tetr *tetrs, int a, int i)
+static t_pos	i_pos(t_pos *pos, t_tetr *tetrs, int a, int i)
 {
 	if (pos)
 	{
@@ -31,7 +31,7 @@ static t_pos	init_pos(t_pos *pos, t_tetr *tetrs, int a, int i)
 	return (pos);
 }
 
-static int		init_cell(t_pos *pos, t_cell **cells)
+static int		i_cell(t_pos *pos, t_cell **cells)
 {
 	int		i;
 	t_cell	*tmp;
@@ -41,8 +41,7 @@ static int		init_cell(t_pos *pos, t_cell **cells)
 	{
 		if ((tmp = cells[pos->a[i]]))
 		{
-			while (tmp->next)
-				tmp = tmp->next;
+			tmp = tmp->prev;
 			if (!(tmp->next = (t_cell)malloc(sizeof(t_cell))))
 				return (0);
 			tmp->next->prev = tmp;
@@ -75,12 +74,10 @@ static int		inits(t_pos **head_pos, t_cell **cells, int a, t_tetr *tetrs)
 			if (tetrs->a[3][0] * a + i < n &&
 				(ft_max(tetrs->a[2][1], tetrs->a[3][1]) + i) / a == i / a)
 			{
-				if (!(pos = init_pos(pos, tetrs, a, i++)))
+				if (!(pos = i_pos(pos, tetrs, a, i++)) || !(i_cell(pos, cells)))
 					return (0);
 				if (!(*head_pos))
 					*head_pos = pos;
-				if (!(init_cell(pos, cells)))
-					return (0);
 			}
 		tetrs++;
 	}
@@ -94,14 +91,26 @@ void			fillit(int n, int a, t_tetr *tetrs)
 	t_pos	*pos;
 	t_cell	cells[a * a];
 	char	flags[a * a];
-	char	tetriminos[n + 1];
+	char	bool[n + 1];
 
-	ft_bzero(cells, sizeof(cells)); // need to check;
-	ft_bzero(flags, sizeof(flags)); // need to fill by "." characters;
-	ft_bzero(tetriminos, sizeof(tetriminos)); // need to check;
-	tetriminos[0] = n;
-	if (inits(&pos, cells, a, tetrs)) //correct
-		backtracking(pos, cells, flags, tetriminos); //correct
+	bool[0] = n;
+	while (n-- > 0)
+		bool[n + 1] = 0;
+	while (n < a * a)
+	{
+		flags[n] = '.';
+		cells[n++] = NULL;
+	}
+	if (inits(&pos, cells, a, tetrs) && backtracking(pos, cells, flags, bool))
+	{
+		n = 0;
+		while (n < a * a)
+		{
+			ft_putchar(flags[n++]);
+			if (n % a == 0)
+				ft_putchar('\n');
+		}
+	}
 	else
-		//free all allocated memory and exit;
+		exit(0); // is it need to free all allocated memory?
 }
