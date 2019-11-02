@@ -6,7 +6,7 @@
 /*   By: aimelda <aimelda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/01 21:06:30 by aimelda           #+#    #+#             */
-/*   Updated: 2019/11/01 23:23:23 by aimelda          ###   ########.fr       */
+/*   Updated: 2019/11/02 21:41:30 by aimelda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static double	ft_sqrt(double n, double precision)
 	while (1)
 	{
 		tmp = (x + n / x) / 2;
-		if (ft_abs(x - tmp) < 1)
+		if (ft_abs(x - tmp) < precision)
 			return (x);
 		x = tmp;
 	}
@@ -33,14 +33,18 @@ int		main(int argc, char **argv)
 	int		a;
 	t_tetr	*tetrs;
 
+	tetrs = NULL;
 	if (argc != 2)
 		ft_putstr("usage: ./fillit source_file\n");
-	else if	((n = input_handling(argv[1]), &tetrs))
+	else if	((n = input_handling(argv[1], &tetrs)))
 	{
-		a = ft_sqrt(n * 4);
+		a = ft_sqrt(n * 4, 1);
 		if (a * a < n * 4)
 			a++;
-		while (true)
+		while (1)
+		{
+			printf("Size of square's side = %i\n", a); //DELETE
 			fillit(n, a++, tetrs);
+		}
 	}
 }
