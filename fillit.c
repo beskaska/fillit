@@ -6,7 +6,7 @@
 /*   By: aimelda <aimelda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:59:46 by aimelda           #+#    #+#             */
-/*   Updated: 2019/11/02 22:37:57 by aimelda          ###   ########.fr       */
+/*   Updated: 2019/11/03 22:36:29 by aimelda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ static t_pos	*i_pos(t_pos *pos, t_tetr *tetrs, int a, int i)
 	pos->a[1] = i + (tetrs->a[2] * a) + tetrs->a[3];
 	pos->a[2] = i + (tetrs->a[4] * a) + tetrs->a[5];
 	pos->a[3] = i + (tetrs->a[6] * a) + tetrs->a[7];
+	printf("Initialized POS{%i %i %i %i}\n", pos->a[0], pos->a[1], pos->a[2], pos->a[3]);//DELETE
 	pos->tetrimino = tetrs->tetrimino;
 	return (pos);
 }
@@ -87,7 +88,7 @@ static int		inits(t_pos **head_pos, t_cell **cells, int a, t_tetr *tetrs)
 		{//DELETE
 		//printf("%c: a[5] = %i; a[7] = %i\n", tetrs->tetrimino, tetrs->a[5], tetrs->a[7]);
 		//printf("%i %i\n", ((int)ft_max(tetrs->a[5], tetrs->a[7]) + i) / a, i / a); //DELETE
-			if (tetrs->a[4] * a + i < n &&
+			if (tetrs->a[6] * a + i < n &&
 				((int)ft_max(tetrs->a[5], tetrs->a[7]) + i) / a == i / a)
 			{
 				//printf("Program was there at i = %i ", i); //DELETE

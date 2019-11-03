@@ -6,7 +6,7 @@
 /*   By: aimelda <aimelda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/31 14:45:48 by aimelda           #+#    #+#             */
-/*   Updated: 2019/11/02 23:47:03 by aimelda          ###   ########.fr       */
+/*   Updated: 2019/11/03 22:51:03 by aimelda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,20 +42,20 @@ static void remove_nodes(t_pos *pos, t_cell **cells, t_stack **stack)
 	i = -1;
 	while (++i < 4)
 	{
-		printf("Program was there at i = %i\n", i);//DELETE
+		printf("In remove_nodes at cell = %i of POS{%i %i %i %i}\n", pos->a[i], pos->a[0], pos->a[1], pos->a[2], pos->a[3]);//DELETE
 		cur = cells[pos->a[i]];
 		while (cur) //пробегаемся по столбцу выбранной ячейки чтобы удалить позиции
 		{
 			j = -1;
 			while (++j < 4)
 			{//DELETE
-			printf("Program was there at j = %i\n", j);//DELETE
+			printf("	at cell = %i of CUR_POS{%i %i %i %i}\n", cur->pos->a[j], cur->pos->a[0], cur->pos->a[1], cur->pos->a[2], cur->pos->a[3]);//DELETE
 				if (pos->a[i] != cur->pos->a[j])
 				{
 					if (cells[cur->pos->a[j]] == cells[cur->pos->a[j]]->next)
 					{
+						new_node(stack, cells[cur->pos->a[j]], 1);
 						cells[cur->pos->a[j]] = NULL;
-						new_node(stack, tmp, 1);
 					}
 					else
 					{
@@ -67,10 +67,12 @@ static void remove_nodes(t_pos *pos, t_cell **cells, t_stack **stack)
 						new_node(stack, tmp, 0);
 						if (tmp == cells[cur->pos->a[j]])
 						{
+							//printf("Program was there...\n");
 							cells[cur->pos->a[j]] = tmp->next; //чтобы начало списка ячейки соответствовал валидному положению
 							(*stack)->head = 1;
 						}
 					}
+					printf("		POS{%i %i %i %i} added to stack\n", (*stack)->elem->pos->a[0], (*stack)->elem->pos->a[1], (*stack)->elem->pos->a[2], (*stack)->elem->pos->a[3]);
 				}
 			}//DELETE
 			cur->pos->next->prev = cur->pos->prev;
@@ -84,15 +86,15 @@ static void remove_nodes(t_pos *pos, t_cell **cells, t_stack **stack)
 
 static int	recursion(t_pos *pos, t_cell **cells, char *flags, char *tetrs)
 {
-	t_pos	*head_pos;
+	t_pos	*last_pos;
 
-	head_pos = pos->prev;
+	last_pos = pos->prev;
 	while (tetrs[pos->tetrimino - 64])
-
-		if (pos == head_pos)
+		if (pos == last_pos)
 			return (0);
 		else
 			pos = pos->next;
+	printf("THERE?\n");//DELETE
 	if (backtracking(pos, cells, flags, tetrs))
 		return (1);
 	return (0);
@@ -108,16 +110,18 @@ static void restore_nodes(t_pos *pos, t_cell **cells, t_stack **stack)
 	i = 4;
 	while (i-- > 0)
 	{
-		//printf("Program was there at i = %i\n", i);//DELETE
-		cur = cells[pos->a[i]]->prev;
+		printf("In restore_nodes at cell = %i of POS{%i %i %i %i}\n", pos->a[i], pos->a[0], pos->a[1], pos->a[2], pos->a[3]);//DELETE
+		cur = cells[pos->a[i]];
 		while (cur)
 		{
+			cur = cur->prev;
 			j = 4;
 			while (j-- > 0)
 			{//DELETE
-			//printf("Program was there at j = %i\n", j);//DELETE
+			printf("	at cell = %i of CUR_POS{%i %i %i %i}\n", cur->pos->a[j], cur->pos->a[0], cur->pos->a[1], cur->pos->a[2], cur->pos->a[3]);//DELETE
 				if (pos->a[i] != cur->pos->a[j])
 				{
+					printf("		POS{%i %i %i %i} retrieved from stack\n", (*stack)->elem->pos->a[0], (*stack)->elem->pos->a[1], (*stack)->elem->pos->a[2], (*stack)->elem->pos->a[3]);
 					if (!cells[cur->pos->a[j]])
 						cells[cur->pos->a[j]] = (*stack)->elem;
 					else
@@ -128,16 +132,15 @@ static void restore_nodes(t_pos *pos, t_cell **cells, t_stack **stack)
 						tmp->next->prev = (*stack)->elem;
 						tmp->next = (*stack)->elem;
 						if ((*stack)->head)
-							cells[cur->pos->a[j]] = tmp;
+							cells[cur->pos->a[j]] = (*stack)->elem;
 					}
 					del_node(stack);
 				}
 			}//DELETE
 			cur->pos->next->prev = cur->pos;
 			cur->pos->prev->next = cur->pos;
-			if (cur->prev == cells[pos->a[i]]->prev)
+			if (cur == cells[pos->a[i]])
 				break;
-			cur = cur->prev;
 		}
 	}
 }
@@ -159,9 +162,10 @@ int			backtracking(t_pos *h_pos, t_cell **cells, char *flags, char *tetrs)
 		if (--tetrs[0] == 0)
 			return (1);
 		remove_nodes(pos, cells, &stack);
-		if (recursion(pos->next, cells, flags, tetrs))
+		if (recursion(h_pos, cells, flags, tetrs))
 			return (1);
 		tetrs[pos->tetrimino - 64] = 0;
+		i = 0;
 		while (i < 4) // if i == 0;
 			flags[pos->a[i++]] = '.';
 		++tetrs[0];
