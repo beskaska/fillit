@@ -6,7 +6,7 @@
 /*   By: aimelda <aimelda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:59:46 by aimelda           #+#    #+#             */
-/*   Updated: 2019/11/08 16:47:24 by aimelda          ###   ########.fr       */
+/*   Updated: 2019/11/09 00:25:24 by aimelda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static int		i_cell(t_pos *pos, t_cell **cells)
 {
 	int		i;
 	t_cell	*tmp;
-
+ 
 	i = -1;
 	while (++i < 4)
 	{
@@ -72,7 +72,7 @@ static int		i_cell(t_pos *pos, t_cell **cells)
 	return (1);
 }
 
-static int		inits(t_pos **head_pos, t_cell **cells, int a, t_tetr *tetrs)
+static int		inits(t_usage **usage, t_cell **cells, int a, t_tetr *tetrs)/* test */
 {
 	int		n;
 	int		i;
@@ -80,7 +80,7 @@ static int		inits(t_pos **head_pos, t_cell **cells, int a, t_tetr *tetrs)
 
 	n = a * a;
 	pos = NULL;
-	*head_pos = NULL;
+	//*head_pos = NULL;
 	while (tetrs)
 	{
 		i = -1;
@@ -90,37 +90,47 @@ static int		inits(t_pos **head_pos, t_cell **cells, int a, t_tetr *tetrs)
 			{
 				if (!(pos = i_pos(pos, tetrs, a, i)) || !(i_cell(pos, cells)))
 					return (0);
-				if (!(*head_pos))
-					*head_pos = pos;
+				//if (!(*head_pos))
+				//	*head_pos = pos;
+				if (!(usage[pos->tetrimino - 65]->head_pos))/* test */
+					usage[pos->tetrimino - 65]->head_pos = pos;/* test */
 			}
 		tetrs = tetrs->next;
 	}
 	if (pos)
 	{
 		pos->next = NULL;
-		(*head_pos)->prev = NULL;
+		//(*head_pos)->prev = NULL;
+		usage[0]->head_pos->prev = NULL;/* test */
 	}
 	return (1);
 }
 
 void			fillit(int n, int a, t_tetr *tetrs)
 {
-	t_pos	*pos;
+	//t_pos	*pos;
 	t_cell	*cells[a * a];
 	char	flags[a * a];
-	char	bool[n + 1];
+	t_usage	*usage[n + 1];/* test */
+	int		i;/* test */
 
-	bool[0] = n;
-	while (n-- > 0)
-		bool[n + 1] = 0;
-	while (n < a * a)
+	i = 0;/* test */
+	while (i <= n)/* test */
+	{/* test */
+		usage[i] = (t_usage*)malloc(sizeof(t_usage));/* test */
+		usage[i]->bool = 0;/* test */
+		usage[i++]->head_pos = NULL;/* test */
+	}/* test */
+	usage[0]->bool = n;/* test */
+	i = 0;/* test */
+	while (i < a * a)/* test */
 	{
-		flags[n] = '.';
-		cells[n++] = NULL;
+		flags[i] = '.';/* test */
+		cells[i++] = NULL;/* test */
 	}
-	if (!(inits(&pos, cells, a, tetrs)))
+	if (!(inits(usage, cells, a, tetrs)))/* test */
 		exit(0);/* is it need to free all allocated memory? */
-	if (backtracking(pos, cells, flags, bool))
+	if (backtracking(usage, cells, flags, usage[0]->head_pos))/* test */
 	{
 		print_ans(flags, a);
 		exit(0);/* is it need to free all allocated memory? */
