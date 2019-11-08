@@ -6,7 +6,7 @@
 /*   By: aimelda <aimelda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/29 21:45:16 by aimelda           #+#    #+#             */
-/*   Updated: 2019/11/04 22:58:43 by aimelda          ###   ########.fr       */
+/*   Updated: 2019/11/08 16:46:55 by aimelda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 #include "libft/libft.h"
 #include "fcntl.h"
-#include <stdio.h> //DELETE
-# define BUFF 600 //*
+#include <stdio.h>/* DELETE */
+# define BUFF 600/* * */
 
 typedef	struct	s_tetr
 {
@@ -29,7 +29,7 @@ typedef	struct s_pos
 {
 	int				a[4];
 	char			tetrimino;
-	char			head;//test
+	char			head;/* test */
 	struct s_pos	*next;
 	struct s_pos	*prev;
 }				t_pos;
@@ -48,7 +48,7 @@ typedef struct s_stack
 	struct s_stack	*next;
 }				t_stack;
 
-typedef struct	s_data //*
+typedef struct	s_data/* * */
 {
 	int count;
 	int i;
