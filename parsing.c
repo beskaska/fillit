@@ -18,31 +18,38 @@ static void		error()
 	exit(1);
 }
 
-static int		has_neighbour(int i, char *buff)
+static int		has_neighbour(int i, char *buff, t_data *data)
 {
+	int tmp;
+
+	tmp = 0;
 	if (i != 0)
 	{
 		if (buff[i - 1] == '#')
-			return (1);
+			tmp += 1;
 	}
 	if (buff[i + 1] == '#')
-		return (1);
+		tmp += 1;
 	if (i > 4)
 	{
 		if (buff[i - 5] == '#')
-			return (1);
+			tmp += 1;
 	}
 	if (i < 14)
 	{
 		if (buff[i + 5] == '#')
-			return (1);
+			tmp += 1;
 	}
-	return (0);
+	if (!tmp)
+		return (0);
+	if (tmp > data->near)
+		data->near = tmp;
+	return (1);
 }
 
 static void		forchest(t_data *data, char *buff, int *piece)
 {
-	if (!has_neighbour(data->i, buff))
+	if (!has_neighbour(data->i, buff, data))
 		error();
 	if (!(data->count))
 	{
@@ -63,6 +70,7 @@ static void		tetrimina(char *buff, t_tetr *tetris)
 	t_data *data;
 
 	data = (t_data *)ft_memalloc(sizeof(t_data));
+	data->near = 0;
 	while (data->i < 20 && data->count < 5)
 	{
 		if (((data->i + 1) % 5) == 0)
@@ -81,10 +89,9 @@ static void		tetrimina(char *buff, t_tetr *tetris)
 			error();
 		data->i++;
 	}
-	if (data->i != 20 || data->count != 4 || buff[20] != '\n')
+	if (data->i != 20 || data->count != 4 || buff[20] != '\n' || data->near < 2)
 		error();
 	free(data);
-	data = NULL;
 	return ;
 }
 

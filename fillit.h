@@ -53,6 +53,7 @@ typedef struct	s_data/* * */
 	int count;
 	int i;
 	int fst;
+	int near;
 }				t_data;
 
 void			fillit(int n, int a, t_tetr *tetrs);
