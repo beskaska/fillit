@@ -6,7 +6,7 @@
 #    By: aimelda <aimelda@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/02 15:19:28 by aimelda           #+#    #+#              #
-#    Updated: 2019/11/04 22:22:06 by aimelda          ###   ########.fr        #
+#    Updated: 2019/11/09 16:05:12 by aimelda          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,7 @@ HDR		=	fillit.h
 SRC		=	main.c				\
 			fillit.c			\
 			backtracking.c		\
+			dancing_links.c		\
 			parsing.c			\
 
 OBJ		=	$(addsuffix .o, $(basename $(SRC)))

@@ -6,7 +6,7 @@
 /*   By: aimelda <aimelda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/29 21:45:16 by aimelda           #+#    #+#             */
-/*   Updated: 2019/11/09 14:10:32 by aimelda          ###   ########.fr       */
+/*   Updated: 2019/11/09 16:11:59 by aimelda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ typedef struct	s_data/* * */
 
 void			fillit(int n, int a, t_tetr *tetrs);
 int				backtracking(t_usage **tetrs, t_cell **cells, char *flags, t_pos *pos);
+void			rem_column(t_cell **cells, t_cell *cur, t_stack **stack, int j);/*test*/
 int				parsing(char *txt, t_tetr **tetris);
 
 #endif
