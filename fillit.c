@@ -6,7 +6,7 @@
 /*   By: aimelda <aimelda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:59:46 by aimelda           #+#    #+#             */
-/*   Updated: 2019/11/09 21:35:28 by aimelda          ###   ########.fr       */
+/*   Updated: 2019/11/09 22:51:08 by aimelda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,9 @@ static int		inits(t_pos **head, t_cell **cells, int a, t_tetr *tetrs)
 	t_pos	*pos;
 
 	n = a * a;
-	pos = NULL;
 	while (tetrs)
 	{
+		pos = NULL;
 		i = -1;
 		while (++i < n - 3)
 			if (tetrs->a[6] * a + i < n &&
@@ -92,12 +92,12 @@ static int		inits(t_pos **head, t_cell **cells, int a, t_tetr *tetrs)
 				if (!(head[pos->tetrimino - 65]))
 					head[pos->tetrimino - 65] = pos;
 			}
+		if (head[tetrs->tetrimino - 65])
+		{
+			pos->next = NULL;
+			head[tetrs->tetrimino - 65]->prev = NULL;
+		}
 		tetrs = tetrs->next;
-	}
-	if (head[0])
-	{
-		pos->next = NULL;
-		head[0]->prev = NULL;
 	}
 	return (1);
 }
@@ -106,7 +106,7 @@ void			fillit(int n, int a, t_tetr *tetrs)
 {
 	t_cell	*cells[a * a];
 	char	flags[a * a + 1];
-	t_pos	*head[n + 1];
+	t_pos	*head[n + 1];/* should move to main */
 	int		i;
 
 	i = 0;
