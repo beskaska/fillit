@@ -6,7 +6,7 @@
 /*   By: aimelda <aimelda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/29 21:45:16 by aimelda           #+#    #+#             */
-/*   Updated: 2019/11/09 16:11:59 by aimelda          ###   ########.fr       */
+/*   Updated: 2019/11/09 21:12:24 by aimelda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,6 @@ typedef struct	s_stack
 	struct s_stack	*next;
 }				t_stack;
 
-typedef struct	s_usage
-{
-	t_pos			*head_pos;
-	char			bool;
-}				t_usage;
-
 typedef struct	s_data/* * */
 {
 	int count;
@@ -63,7 +57,7 @@ typedef struct	s_data/* * */
 }				t_data;
 
 void			fillit(int n, int a, t_tetr *tetrs);
-int				backtracking(t_usage **tetrs, t_cell **cells, char *flags, t_pos *pos);
+int				tracking(t_pos **head, t_cell **cells, char *flags, t_pos *pos);
 void			rem_column(t_cell **cells, t_cell *cur, t_stack **stack, int j);/*test*/
 int				parsing(char *txt, t_tetr **tetris);
 

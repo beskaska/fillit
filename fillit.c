@@ -6,7 +6,7 @@
 /*   By: aimelda <aimelda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:59:46 by aimelda           #+#    #+#             */
-/*   Updated: 2019/11/09 15:30:34 by aimelda          ###   ########.fr       */
+/*   Updated: 2019/11/09 21:35:28 by aimelda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,13 @@ static void		print_ans(char *flags, int a)
 {
 	int		i;
 
-	i = 0;
-	while (i < a * a)
+	i = 1;
+	while (i <= a * a)
 	{
-		ft_putchar(flags[i++]);
+		ft_putchar(flags[i]);
 		if (i % a == 0)
 			ft_putchar('\n');
+		i++;
 	}
 }
 
@@ -71,7 +72,7 @@ static int		i_cell(t_pos *pos, t_cell **cells)
 	return (1);
 }
 
-static int		inits(t_usage **usage, t_cell **cells, int a, t_tetr *tetrs)
+static int		inits(t_pos **head, t_cell **cells, int a, t_tetr *tetrs)
 {
 	int		n;
 	int		i;
@@ -88,15 +89,15 @@ static int		inits(t_usage **usage, t_cell **cells, int a, t_tetr *tetrs)
 			{
 				if (!(pos = i_pos(pos, tetrs, a, i)) || !(i_cell(pos, cells)))
 					return (0);
-				if (!(usage[pos->tetrimino - 65]->head_pos))
-					usage[pos->tetrimino - 65]->head_pos = pos;
+				if (!(head[pos->tetrimino - 65]))
+					head[pos->tetrimino - 65] = pos;
 			}
 		tetrs = tetrs->next;
 	}
-	if (usage[0]->head_pos)
+	if (head[0])
 	{
 		pos->next = NULL;
-		usage[0]->head_pos->prev = NULL;
+		head[0]->prev = NULL;
 	}
 	return (1);
 }
@@ -104,27 +105,23 @@ static int		inits(t_usage **usage, t_cell **cells, int a, t_tetr *tetrs)
 void			fillit(int n, int a, t_tetr *tetrs)
 {
 	t_cell	*cells[a * a];
-	char	flags[a * a];
-	t_usage	*usage[n + 1];
+	char	flags[a * a + 1];
+	t_pos	*head[n + 1];
 	int		i;
 
 	i = 0;
 	while (i <= n)
-	{
-		usage[i] = (t_usage*)malloc(sizeof(t_usage));
-		usage[i]->bool = 0;
-		usage[i++]->head_pos = NULL;
-	}
-	usage[0]->bool = n;
+		head[i++] = NULL;
 	i = 0;
+	flags[0] = n;
 	while (i < a * a)
 	{
-		flags[i] = '.';
 		cells[i++] = NULL;
+		flags[i] = '.';
 	}
-	if (!(inits(usage, cells, a, tetrs)))
+	if (!(inits(head, cells, a, tetrs)))
 		exit(0);/* is it need to free all allocated memory? */
-	if (backtracking(usage, cells, flags, usage[0]->head_pos))
+	if (tracking(head, cells, flags, head[0]))
 	{
 		print_ans(flags, a);
 		exit(0);/* is it need to free all allocated memory? */
