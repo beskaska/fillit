@@ -6,7 +6,7 @@
 /*   By: aimelda <aimelda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:59:46 by aimelda           #+#    #+#             */
-/*   Updated: 2019/11/09 14:12:24 by aimelda          ###   ########.fr       */
+/*   Updated: 2019/11/09 15:30:34 by aimelda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,15 +91,9 @@ static int		inits(t_usage **usage, t_cell **cells, int a, t_tetr *tetrs)
 				if (!(usage[pos->tetrimino - 65]->head_pos))
 					usage[pos->tetrimino - 65]->head_pos = pos;
 			}
-		if (usage[tetrs->tetrimino - 65]->head_pos)
-			tetrs = tetrs->next;
-		else
-		{
-			usage[0]->head_pos = NULL;
-			return (1);
-		}
+		tetrs = tetrs->next;
 	}
-	if (pos)
+	if (usage[0]->head_pos)
 	{
 		pos->next = NULL;
 		usage[0]->head_pos->prev = NULL;
