@@ -6,7 +6,7 @@
 /*   By: aimelda <aimelda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:59:46 by aimelda           #+#    #+#             */
-/*   Updated: 2019/11/09 00:25:24 by aimelda          ###   ########.fr       */
+/*   Updated: 2019/11/09 14:12:24 by aimelda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ static t_pos	*i_pos(t_pos *pos, t_tetr *tetrs, int a, int i)
 	pos->a[2] = i + (tetrs->a[4] * a) + tetrs->a[5];
 	pos->a[3] = i + (tetrs->a[6] * a) + tetrs->a[7];
 	pos->tetrimino = tetrs->tetrimino;
-	pos->head = 0;/* test */
 	return (pos);
 }
 
@@ -49,7 +48,7 @@ static int		i_cell(t_pos *pos, t_cell **cells)
 {
 	int		i;
 	t_cell	*tmp;
- 
+
 	i = -1;
 	while (++i < 4)
 	{
@@ -72,7 +71,7 @@ static int		i_cell(t_pos *pos, t_cell **cells)
 	return (1);
 }
 
-static int		inits(t_usage **usage, t_cell **cells, int a, t_tetr *tetrs)/* test */
+static int		inits(t_usage **usage, t_cell **cells, int a, t_tetr *tetrs)
 {
 	int		n;
 	int		i;
@@ -80,7 +79,6 @@ static int		inits(t_usage **usage, t_cell **cells, int a, t_tetr *tetrs)/* test 
 
 	n = a * a;
 	pos = NULL;
-	//*head_pos = NULL;
 	while (tetrs)
 	{
 		i = -1;
@@ -90,47 +88,49 @@ static int		inits(t_usage **usage, t_cell **cells, int a, t_tetr *tetrs)/* test 
 			{
 				if (!(pos = i_pos(pos, tetrs, a, i)) || !(i_cell(pos, cells)))
 					return (0);
-				//if (!(*head_pos))
-				//	*head_pos = pos;
-				if (!(usage[pos->tetrimino - 65]->head_pos))/* test */
-					usage[pos->tetrimino - 65]->head_pos = pos;/* test */
+				if (!(usage[pos->tetrimino - 65]->head_pos))
+					usage[pos->tetrimino - 65]->head_pos = pos;
 			}
-		tetrs = tetrs->next;
+		if (usage[tetrs->tetrimino - 65]->head_pos)
+			tetrs = tetrs->next;
+		else
+		{
+			usage[0]->head_pos = NULL;
+			return (1);
+		}
 	}
 	if (pos)
 	{
 		pos->next = NULL;
-		//(*head_pos)->prev = NULL;
-		usage[0]->head_pos->prev = NULL;/* test */
+		usage[0]->head_pos->prev = NULL;
 	}
 	return (1);
 }
 
 void			fillit(int n, int a, t_tetr *tetrs)
 {
-	//t_pos	*pos;
 	t_cell	*cells[a * a];
 	char	flags[a * a];
-	t_usage	*usage[n + 1];/* test */
-	int		i;/* test */
+	t_usage	*usage[n + 1];
+	int		i;
 
-	i = 0;/* test */
-	while (i <= n)/* test */
-	{/* test */
-		usage[i] = (t_usage*)malloc(sizeof(t_usage));/* test */
-		usage[i]->bool = 0;/* test */
-		usage[i++]->head_pos = NULL;/* test */
-	}/* test */
-	usage[0]->bool = n;/* test */
-	i = 0;/* test */
-	while (i < a * a)/* test */
+	i = 0;
+	while (i <= n)
 	{
-		flags[i] = '.';/* test */
-		cells[i++] = NULL;/* test */
+		usage[i] = (t_usage*)malloc(sizeof(t_usage));
+		usage[i]->bool = 0;
+		usage[i++]->head_pos = NULL;
 	}
-	if (!(inits(usage, cells, a, tetrs)))/* test */
+	usage[0]->bool = n;
+	i = 0;
+	while (i < a * a)
+	{
+		flags[i] = '.';
+		cells[i++] = NULL;
+	}
+	if (!(inits(usage, cells, a, tetrs)))
 		exit(0);/* is it need to free all allocated memory? */
-	if (backtracking(usage, cells, flags, usage[0]->head_pos))/* test */
+	if (backtracking(usage, cells, flags, usage[0]->head_pos))
 	{
 		print_ans(flags, a);
 		exit(0);/* is it need to free all allocated memory? */

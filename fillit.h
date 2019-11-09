@@ -6,49 +6,49 @@
 /*   By: aimelda <aimelda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/29 21:45:16 by aimelda           #+#    #+#             */
-/*   Updated: 2019/11/08 22:37:22 by aimelda          ###   ########.fr       */
+/*   Updated: 2019/11/09 14:10:32 by aimelda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FILLIT_H
 # define FILLIT_H
 
-#include "libft/libft.h"
-#include "fcntl.h"
-#include <stdio.h>/* DELETE */
 # define BUFF 600/* * */
 
-typedef	struct	s_tetr
+# include "libft/libft.h"
+# include "fcntl.h"
+# include <stdio.h>/* DELETE */
+
+typedef struct	s_tetr
 {
 	int				a[8];
 	char			tetrimino;
 	struct s_tetr	*next;
 }				t_tetr;
 
-typedef	struct s_pos
+typedef struct	s_pos
 {
 	int				a[4];
 	char			tetrimino;
-	char			head;/* test */
 	struct s_pos	*next;
 	struct s_pos	*prev;
 }				t_pos;
 
-typedef struct s_cell
+typedef struct	s_cell
 {
 	t_pos			*pos;
 	struct s_cell	*next;
 	struct s_cell	*prev;
 }				t_cell;
 
-typedef struct s_stack
+typedef struct	s_stack
 {
 	t_cell			*elem;
 	char			head;
 	struct s_stack	*next;
 }				t_stack;
 
-typedef struct	s_usage/* test */
+typedef struct	s_usage
 {
 	t_pos			*head_pos;
 	char			bool;
@@ -63,7 +63,7 @@ typedef struct	s_data/* * */
 }				t_data;
 
 void			fillit(int n, int a, t_tetr *tetrs);
-int				backtracking(t_usage **tetrs, t_cell **cells, char *flags, t_pos *pos);/* test */
+int				backtracking(t_usage **tetrs, t_cell **cells, char *flags, t_pos *pos);
 int				parsing(char *txt, t_tetr **tetris);
 
 #endif

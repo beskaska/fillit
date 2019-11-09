@@ -6,13 +6,13 @@
 /*   By: aimelda <aimelda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/31 14:45:48 by aimelda           #+#    #+#             */
-/*   Updated: 2019/11/09 00:08:53 by aimelda          ###   ########.fr       */
+/*   Updated: 2019/11/09 15:05:45 by aimelda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
 
-static void new_node(t_stack **head, t_cell *content, char begin)
+static void	new_node(t_stack **head, t_cell *content, char begin)
 {
 	t_stack	*tmp;
 
@@ -32,7 +32,7 @@ static void	del_node(t_stack **head)
 	free(tmp);
 }
 
-static void remove_nodes(t_pos *pos, t_cell **cells, t_stack **stack, t_usage **tetrs)/* test */
+static void	remove_nodes(t_pos *pos, t_cell **cells, t_stack **stack, t_usage **tetrs)
 {
 	t_cell	*cur;
 	t_cell	*tmp;
@@ -73,36 +73,33 @@ static void remove_nodes(t_pos *pos, t_cell **cells, t_stack **stack, t_usage **
 				cur->pos->next->prev = cur->pos->prev;
 			if (cur->pos->prev)
 				cur->pos->prev->next = cur->pos->next;
-			if (cur->pos == tetrs[cur->pos->tetrimino - 65]->head_pos)/* test */
-			{/* test */
-				//cur->pos->head = 1;/* test */
-				if (cur->pos->next && cur->pos->tetrimino == cur->pos->next->tetrimino)/* test */
-					tetrs[cur->pos->tetrimino - 65]->head_pos = cur->pos->next;/* test */
-				else/* test */
-					tetrs[cur->pos->tetrimino - 65]->head_pos = NULL;/* test */
-			}/* test */
+			if (cur->pos == tetrs[cur->pos->tetrimino - 65]->head_pos)
+			{
+				if (cur->pos->next && cur->pos->tetrimino == cur->pos->next->tetrimino)
+					tetrs[cur->pos->tetrimino - 65]->head_pos = cur->pos->next;
+				else
+					tetrs[cur->pos->tetrimino - 65]->head_pos = NULL;
+			}
 			if (cur->next == cells[pos->a[i]])
-				break;
+				break ;
 			cur = cur->next;
 		}
 	}
 }
 
-static int	recursion(t_cell **cells, char *flags, t_usage **tetrs)/* test */
+static int	recursion(t_cell **cells, char *flags, t_usage **tetrs)
 {
-	int		i;/* test */
+	int		i;
 
-	i = 1;/* test */
-	//while (pos && tetrs[pos->tetrimino - 64])
-	//	pos = pos->next;
-	while (tetrs[i]->bool)/* test */
-		i++;/* test */
-	if (tetrs[--i]->head_pos)/* test */
-		return (backtracking(tetrs, cells, flags, tetrs[i]->head_pos));/* test */
+	i = 1;
+	while (tetrs[i]->bool)
+		i++;
+	if (tetrs[--i]->head_pos)
+		return (backtracking(tetrs, cells, flags, tetrs[i]->head_pos));
 	return (0);
 }
 
-static void restore_nodes(t_pos *pos, t_cell **cells, t_stack **stack, t_usage **tetrs)/* test */
+static void	restore_nodes(t_pos *pos, t_cell **cells, t_stack **stack, t_usage **tetrs)
 {
 	t_cell	*cur;
 	t_cell	*tmp;
@@ -138,44 +135,39 @@ static void restore_nodes(t_pos *pos, t_cell **cells, t_stack **stack, t_usage *
 				cur->pos->next->prev = cur->pos;
 			if (cur->pos->prev)
 				cur->pos->prev->next = cur->pos;
-			if (!(cur->pos->prev) || cur->pos->tetrimino != cur->pos->prev->tetrimino)/* test */
-			{/* test */
-				tetrs[cur->pos->tetrimino - 65]->head_pos = cur->pos;/* test */
-				//cur->pos->head = 0;/* test */
-			}/* test */
+			if (!(cur->pos->prev) || cur->pos->tetrimino != cur->pos->prev->tetrimino)
+				tetrs[cur->pos->tetrimino - 65]->head_pos = cur->pos;
 			if (cur == cells[pos->a[i]])
-				break;
+				break ;
 		}
 	}
 }
 
-int			backtracking(t_usage **tetrs, t_cell **cells, char *flags, t_pos *pos)/* test */
+int			backtracking(t_usage **tetrs, t_cell **cells, char *flags, t_pos *pos)
 {
-	//t_pos	*pos;
 	t_stack	*stack;
 	int		i;
 
 	stack = NULL;
-	//pos = h_pos;
 	while (pos)
 	{
 		if (!(tetrs[pos->tetrimino - 64]->bool))
 		{
-			tetrs[pos->tetrimino - 64]->bool = 1;/* test */
+			tetrs[pos->tetrimino - 64]->bool = 1;
 			i = 4;
 			while (i-- > 0)
 				flags[pos->a[i]] = pos->tetrimino;
-			if (--(tetrs[0]->bool) == 0)/* test */
+			if (--(tetrs[0]->bool) == 0)
 				return (1);
-			remove_nodes(pos, cells, &stack, tetrs);/* test */
-			if (recursion(cells, flags, tetrs))/* test */
+			remove_nodes(pos, cells, &stack, tetrs);
+			if (recursion(cells, flags, tetrs))
 				return (1);
-			restore_nodes(pos, cells, &stack, tetrs);/* test */
-			tetrs[pos->tetrimino - 64]->bool = 0;/* test */
+			restore_nodes(pos, cells, &stack, tetrs);
+			tetrs[pos->tetrimino - 64]->bool = 0;
 			i = 0;
 			while (i < 4)
 				flags[pos->a[i++]] = '.';
-			++(tetrs[0]->bool);/* test */
+			++(tetrs[0]->bool);
 		}
 		pos = pos->next;
 	}

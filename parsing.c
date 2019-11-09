@@ -6,13 +6,13 @@
 /*   By: aimelda <aimelda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/05 21:04:39 by pmelodi           #+#    #+#             */
-/*   Updated: 2019/11/04 21:46:22 by aimelda          ###   ########.fr       */
+/*   Updated: 2019/11/09 14:15:23 by aimelda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
 
-static void		error()
+static void		error(void)
 {
 	ft_putstr("error\n");
 	exit(1);
@@ -59,8 +59,8 @@ static void		forchest(t_data *data, char *buff, int *piece)
 	}
 	else
 	{
-		(piece[(2*(data->count))]) = (data->i) / 5  - (data->fst) / 5 ;
-		(piece[2*(data->count) + 1]) = (data->i + 1) % 5 - (data->fst + 1) % 5;
+		(piece[(2 * (data->count))]) = (data->i) / 5  - (data->fst) / 5;
+		(piece[2 * (data->count) + 1]) = (data->i + 1) % 5 - (data->fst + 1) % 5;
 	}
 	data->count += 1;
 }
@@ -112,7 +112,7 @@ static void		another_format(t_tetr *tetris)
 				tetris->a[3] -= neg;
 				tetris->a[5] -= neg;
 				tetris->a[7] -= neg;
-				break;
+				break ;
 			}
 			j++;
 		}
