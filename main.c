@@ -6,7 +6,7 @@
 /*   By: aimelda <aimelda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/01 21:06:30 by aimelda           #+#    #+#             */
-/*   Updated: 2019/11/10 15:18:20 by aimelda          ###   ########.fr       */
+/*   Updated: 2019/11/11 00:27:19 by aimelda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@ int		main(int argc, char **argv)
 		if (a * a < n * 4)
 			a++;
 		while (1)
+		{
+			//printf("SQUARE'S SIZE = %i\n", a);//del
 			fillit(n, a++, tetrs);
+		}
 	}
 }

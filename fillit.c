@@ -6,7 +6,7 @@
 /*   By: aimelda <aimelda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:59:46 by aimelda           #+#    #+#             */
-/*   Updated: 2019/11/10 01:52:39 by aimelda          ###   ########.fr       */
+/*   Updated: 2019/11/11 00:25:02 by aimelda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static int		i_cell(t_pos *pos, t_cell **cells)
 		else
 			tmp = cells[pos->a[i]];
 		tmp->pos = pos;
-		tmp->next = cells[pos->a[i]];
+		tmp->next = NULL;
 		cells[pos->a[i]]->prev = tmp;
 	}
 	return (1);

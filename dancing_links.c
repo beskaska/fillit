@@ -6,7 +6,7 @@
 /*   By: aimelda <aimelda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/09 15:48:35 by aimelda           #+#    #+#             */
-/*   Updated: 2019/11/09 16:12:50 by aimelda          ###   ########.fr       */
+/*   Updated: 2019/11/10 23:45:22 by aimelda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,22 @@ void	rem_column(t_cell **cells, t_cell *cur, t_stack **stack, int j)
 {
 	t_cell	*tmp;
 
-	if (cells[cur->pos->a[j]] == cells[cur->pos->a[j]]->next)
+	/*if (!(cells[cur->pos->a[j]]->next))
 	{
 		new_node(stack, cells[cur->pos->a[j]], 1);
 		cells[cur->pos->a[j]] = NULL;
 	}
-	else
+	else*/
 	{
 		tmp = cells[cur->pos->a[j]];
 		while (tmp->pos != cur->pos)
 			tmp = tmp->next;
-		tmp->next->prev = tmp->prev;
-		tmp->prev->next = tmp->next;
+		if (tmp->next)
+			tmp->next->prev = tmp->prev;
+		else
+			cells[cur->pos->a[j]]->prev = tmp->prev;
+		if (tmp->prev->next)
+			tmp->prev->next = tmp->next;
 		new_node(stack, tmp, 0);
 		if (tmp == cells[cur->pos->a[j]])
 		{
