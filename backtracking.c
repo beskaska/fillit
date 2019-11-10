@@ -33,20 +33,23 @@ static int	removing(t_pos *pos, t_cell **cells, t_stack **stack, t_pos **tetrs)
 		cur = cells[pos->a[i]];
 		while (cur)
 		{
-			j = -1;
-			while (++j < 4)
-				if (pos->a[i] != cur->pos->a[j])
-					rem_column(cells, cur, stack, j);
-			if (cur->pos->next)
-				cur->pos->next->prev = cur->pos->prev;
-			if (cur->pos->prev)
-				cur->pos->prev->next = cur->pos->next;
-			if (cur->pos == tetrs[cur->pos->tetrimino - 65])
+			if (cur->pos->tetrimino > pos->tetrimino)
 			{
+				j = -1;
+				while (++j < 4)
+					if (pos->a[i] != cur->pos->a[j])
+						rem_column(cells, cur, stack, j);
 				if (cur->pos->next)
-					tetrs[cur->pos->tetrimino - 65] = cur->pos->next;
-				else
-					return (i);
+					cur->pos->next->prev = cur->pos->prev;
+				if (cur->pos->prev)
+					cur->pos->prev->next = cur->pos->next;
+				if (cur->pos == tetrs[cur->pos->tetrimino - 65])
+				{
+					if (cur->pos->next)
+						tetrs[cur->pos->tetrimino - 65] = cur->pos->next;
+					else
+						return (i);
+				}
 			}
 			if (cur->next == cells[pos->a[i]])
 				break ;
@@ -56,16 +59,6 @@ static int	removing(t_pos *pos, t_cell **cells, t_stack **stack, t_pos **tetrs)
 	return (i);
 }
 
-/*static int	recursion(t_cell **cells, char *flags, t_pos **tetrs)
-{
-	int		i;
-
-	i = 0;
-	while (!tetrs[i])
-		i++;
-	return (tracking(tetrs, cells, flags, tetrs[i]));
-}*/
-
 static void	restoring(int i, t_cell **cells, t_stack **stack, t_pos **tetrs)
 {
 	t_cell	*cur;
@@ -73,36 +66,35 @@ static void	restoring(int i, t_cell **cells, t_stack **stack, t_pos **tetrs)
 	int		j;
 
 	cur = cells[i]->prev;
-	while (cur->pos != (*stack)->elem->pos)
-		cur = cur->prev;
-	while (cur)
+	while (*stack && cur != cells[i])
 	{
-		j = 4;
-		while (j-- > 0)
-			if (i != cur->pos->a[j])
-			{
-				tmp = cells[cur->pos->a[j]];
-				if (!tmp)
-					tmp = (*stack)->elem;
-				else
+		if (cur->pos == (*stack)->elem->pos)
+		{
+			j = 4;
+			while (j-- > 0)
+				if (i != cur->pos->a[j])
 				{
-					while (tmp->pos != (*stack)->elem->prev->pos)
-						tmp = tmp->next;
-					tmp->next->prev = (*stack)->elem;
-					tmp->next = (*stack)->elem;
+					tmp = cells[cur->pos->a[j]];
+					if (!tmp)
+						tmp = (*stack)->elem;
+					else
+					{
+						while (tmp->pos != (*stack)->elem->prev->pos)
+							tmp = tmp->next;
+						tmp->next->prev = (*stack)->elem;
+						tmp->next = (*stack)->elem;
+					}
+					if ((*stack)->head)
+						cells[cur->pos->a[j]] = (*stack)->elem;
+					del_node(stack);
 				}
-				if ((*stack)->head)
-					cells[cur->pos->a[j]] = (*stack)->elem;
-				del_node(stack);
-			}
-		if (cur->pos->next)
-			cur->pos->next->prev = cur->pos;
-		if (cur->pos->prev)
-			cur->pos->prev->next = cur->pos;
-		if (tetrs[cur->pos->tetrimino - 65] && !(cur->pos->prev))
-			tetrs[cur->pos->tetrimino - 65] = cur->pos;
-		if (cur == cells[i])
-			break ;
+			if (cur->pos->next)
+				cur->pos->next->prev = cur->pos;
+			if (cur->pos->prev)
+				cur->pos->prev->next = cur->pos;
+			else
+				tetrs[cur->pos->tetrimino - 65] = cur->pos;
+		}
 		cur = cur->prev;
 	}
 }
@@ -111,7 +103,6 @@ int			tracking(t_pos **tetrs, t_cell **cells, char *flags, t_pos *pos)
 {
 	t_stack		*stack;
 	int			i;
-	t_pos		*tmp;
 
 	stack = NULL;
 	while (pos)
@@ -121,16 +112,13 @@ int			tracking(t_pos **tetrs, t_cell **cells, char *flags, t_pos *pos)
 			flags[pos->a[i] + 1] = pos->tetrimino;
 		if (pos->tetrimino - 64 == flags[0])
 			return (1);
-		tmp = tetrs[pos->tetrimino - 65];
-		tetrs[pos->tetrimino - 65] = NULL;
 		i = removing(pos, cells, &stack, tetrs);
 		if (i == 4 && tracking(tetrs, cells, flags, tetrs[pos->tetrimino - 64]))
 			return (1);
-		tetrs[pos->tetrimino - 65] = tmp;
 		if (i < 4)
 			i++;
-		while (i-- > 0)
-			if (cells[pos->a[i]])
+		while (stack)
+			if (cells[pos->a[--i]])
 				restoring(pos->a[i], cells, &stack, tetrs);
 		i = 0;
 		while (i < 4)

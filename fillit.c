@@ -6,7 +6,7 @@
 /*   By: aimelda <aimelda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:59:46 by aimelda           #+#    #+#             */
-/*   Updated: 2019/11/09 22:51:08 by aimelda          ###   ########.fr       */
+/*   Updated: 2019/11/10 01:52:39 by aimelda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void			fillit(int n, int a, t_tetr *tetrs)
 {
 	t_cell	*cells[a * a];
 	char	flags[a * a + 1];
-	t_pos	*head[n + 1];/* should move to main */
+	t_pos	*head[n + 1];
 	int		i;
 
 	i = 0;

@@ -6,7 +6,7 @@
 #    By: aimelda <aimelda@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/06 21:18:08 by aimelda           #+#    #+#              #
-#    Updated: 2019/10/26 22:02:01 by aimelda          ###   ########.fr        #
+#    Updated: 2019/11/10 15:10:02 by aimelda          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -78,16 +78,19 @@ SRC		=	ft_memset.c			\
 			ft_min.c			\
 			ft_isspace.c		\
 			ft_lstfree.c		\
+			ft_sqrt.c			\
 			get_next_line.c		\
 
 OBJ		=	$(addsuffix .o, $(basename $(SRC)))
 
 NEW_OBJ	=	$(addsuffix .o, $(basename $?))
 
+C_FLAGS	=	-Wall -Wextra -Werror
+
 all: $(NAME)
 
 $(NAME): $(SRC)
-	gcc -Wall -Wextra -Werror -I$(HDR) -c $?
+	gcc $(C_FLAGS) -I$(HDR) -c $?
 	ar rc $@ $(NEW_OBJ)
 	ranlib $@
 

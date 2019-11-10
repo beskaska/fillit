@@ -6,7 +6,7 @@
 /*   By: aimelda <aimelda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 22:44:45 by aimelda           #+#    #+#             */
-/*   Updated: 2019/10/26 22:01:12 by aimelda          ###   ########.fr       */
+/*   Updated: 2019/11/10 15:09:35 by aimelda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ size_t			ft_max(size_t n1, size_t n2);
 size_t			ft_min(size_t n1, size_t n2);
 int				ft_isspace(int c);
 void			ft_lstfree(t_list **head);
+double			ft_sqrt(double n, double precision);
 
 int				get_next_line(const int fd, char **line);
 
