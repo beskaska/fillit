@@ -6,7 +6,7 @@
 /*   By: aimelda <aimelda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/29 21:45:16 by aimelda           #+#    #+#             */
-/*   Updated: 2019/11/09 21:12:24 by aimelda          ###   ########.fr       */
+/*   Updated: 2019/11/11 14:34:48 by aimelda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ typedef struct	s_cell
 typedef struct	s_stack
 {
 	t_cell			*elem;
-	char			head;
 	struct s_stack	*next;
 }				t_stack;
 

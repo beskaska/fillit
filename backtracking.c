@@ -31,14 +31,10 @@ static int	removing(t_pos *pos, t_cell **cells, t_stack **stack, t_pos **tetrs)
 	while (++i < 4)
 	{
 		cur = cells[pos->a[i]];
-		//printf("CUR_POS {%i, %i, %i, %i}\n", cur->pos->a[0], cur->pos->a[1], cur->pos->a[2], cur->pos->a[3]);//del
 		while (cur)
 		{
 			if (cur->pos->tetrimino > pos->tetrimino)
 			{
-				//printf("POS {%i, %i, %i, %i}\n", pos->a[0], pos->a[1], pos->a[2], pos->a[3]);//del
-				//printf("CUR_POS_TETRIMINO = %c\n", cur->pos->tetrimino);
-				//printf("POS_TETRIMINO = %c\n", pos->tetrimino);
 				j = -1;
 				while (++j < 4)
 					if (pos->a[i] != cur->pos->a[j])
@@ -55,8 +51,6 @@ static int	removing(t_pos *pos, t_cell **cells, t_stack **stack, t_pos **tetrs)
 						return (i);
 				}
 			}
-			/*if (cur->next == cells[pos->a[i]])
-				break ;*/
 			cur = cur->next;
 		}
 	}
@@ -71,15 +65,12 @@ static void	restoring(int i, t_cell **cells, t_stack **stack, t_pos **tetrs)
 	cur = cells[i]->prev;
 	while (*stack)
 	{
-		//printf("CUR_POS {%i, %i, %i, %i}\n", cur->pos->a[0], cur->pos->a[1], cur->pos->a[2], cur->pos->a[3]);//del
-		//printf("Stack_POS {%i, %i, %i, %i}\n", (*stack)->elem->pos->a[0], (*stack)->elem->pos->a[1], (*stack)->elem->pos->a[2], (*stack)->elem->pos->a[3]);//del
 		if (cur->pos == (*stack)->elem->pos)
 		{
 			j = 4;
 			while (j-- > 0)
 				if (i != cur->pos->a[j])
 				{
-					//printf("j = %i\n", j);//del
 					if (!cells[cur->pos->a[j]])
 						cells[cur->pos->a[j]] = (*stack)->elem;
 					else if (!((*stack)->elem->next))
@@ -123,17 +114,13 @@ int			tracking(t_pos **tetrs, t_cell **cells, char *flags, t_pos *pos)
 			flags[pos->a[i] + 1] = pos->tetrimino;
 		if (pos->tetrimino - 64 == flags[0])
 			return (1);
-		i = removing(pos, cells, &stack, tetrs);
-		if (i == 4 && tracking(tetrs, cells, flags, tetrs[pos->tetrimino - 64]))
-			return (1);
-		if (i < 4)
+		if ((i = removing(pos, cells, &stack, tetrs)) < 4)
 			i++;
+		else if (tracking(tetrs, cells, flags, tetrs[pos->tetrimino - 64]))
+			return (1);
 		while (stack)
 			if (cells[pos->a[--i]])
-			{//del
-				//printf("i = %i\n", i);//del
 				restoring(pos->a[i], cells, &stack, tetrs);
-			}//del
 		i = 0;
 		while (i < 4)
 			flags[pos->a[i++] + 1] = '.';
