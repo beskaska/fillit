@@ -21,6 +21,21 @@ static void	del_node(t_stack **head)
 	free(tmp);
 }
 
+static int	freeing(t_stack **stack)
+{
+	while (*stack)
+	{
+		free((*stack)->elem->pos);
+		free((*stack)->elem);
+		del_node(stack);
+		free((*stack)->elem);
+		del_node(stack);
+		free((*stack)->elem);
+		del_node(stack);
+	}
+	return (1);
+}
+
 static int	removing(t_pos *pos, t_cell **cells, t_stack **stack, t_pos **tetrs)
 {
 	t_cell	*cur;
@@ -43,13 +58,10 @@ static int	removing(t_pos *pos, t_cell **cells, t_stack **stack, t_pos **tetrs)
 					cur->pos->next->prev = cur->pos->prev;
 				if (cur->pos->prev)
 					cur->pos->prev->next = cur->pos->next;
-				if (cur->pos == tetrs[cur->pos->tetrimino - 65])
-				{
-					if (cur->pos->next)
-						tetrs[cur->pos->tetrimino - 65] = cur->pos->next;
-					else
-						return (i);
-				}
+				else if (cur->pos->next)
+					tetrs[cur->pos->tetrimino - 65] = cur->pos->next;
+				else
+					return (i);
 			}
 			cur = cur->next;
 		}
@@ -117,7 +129,7 @@ int			tracking(t_pos **tetrs, t_cell **cells, char *flags, t_pos *pos)
 		if ((i = removing(pos, cells, &stack, tetrs)) < 4)
 			i++;
 		else if (tracking(tetrs, cells, flags, tetrs[pos->tetrimino - 64]))
-			return (1);
+			return (freeing(&stack));
 		while (stack)
 			if (cells[pos->a[--i]])
 				restoring(pos->a[i], cells, &stack, tetrs);

@@ -6,13 +6,25 @@
 /*   By: aimelda <aimelda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/01 21:06:30 by aimelda           #+#    #+#             */
-/*   Updated: 2019/11/11 00:27:19 by aimelda          ###   ########.fr       */
+/*   Updated: 2019/11/11 16:06:41 by aimelda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
 
-int		main(int argc, char **argv)
+static void	freeing(t_tetr *tetrs)
+{
+	t_tetr	*tmp;
+
+	while (tetrs)
+	{
+		tmp = tetrs;
+		tetrs = tetrs->next;
+		free(tmp);
+	}
+}
+
+int			main(int argc, char **argv)
 {
 	int		n;
 	int		a;
@@ -26,10 +38,7 @@ int		main(int argc, char **argv)
 		a = ft_sqrt(n * 4, 1);
 		if (a * a < n * 4)
 			a++;
-		while (1)
-		{
-			//printf("SQUARE'S SIZE = %i\n", a);//del
-			fillit(n, a++, tetrs);
-		}
+		while (!(fillit(n, a++, tetrs)));
+		freeing(tetrs);
 	}
 }

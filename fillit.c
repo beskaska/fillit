@@ -6,11 +6,32 @@
 /*   By: aimelda <aimelda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:59:46 by aimelda           #+#    #+#             */
-/*   Updated: 2019/11/11 00:25:02 by aimelda          ###   ########.fr       */
+/*   Updated: 2019/11/11 16:05:56 by aimelda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
+
+static void		freeing(t_pos **head, t_cell **cells, int n, int m)
+{
+	t_pos	*tmp_pos;
+	t_cell	*tmp_cell;
+
+	while (n--)
+		while (head[n])
+		{
+			tmp_pos = head[n];
+			head[n] = head[n]->next;
+			free(tmp_pos);
+		}
+	while (m--)
+		while (cells[m])
+		{
+			tmp_cell = cells[m];
+			cells[m] = cells[m]->next;
+			free(tmp_cell);
+		}
+}
 
 static void		print_ans(char *flags, int a)
 {
@@ -102,11 +123,11 @@ static int		inits(t_pos **head, t_cell **cells, int a, t_tetr *tetrs)
 	return (1);
 }
 
-void			fillit(int n, int a, t_tetr *tetrs)
+int				fillit(int n, int a, t_tetr *tetrs)
 {
 	t_cell	*cells[a * a];
 	char	flags[a * a + 1];
-	t_pos	*head[n + 1];
+	t_pos	*head[n];/*test*/
 	int		i;
 
 	i = 0;
@@ -120,10 +141,17 @@ void			fillit(int n, int a, t_tetr *tetrs)
 		flags[i] = '.';
 	}
 	if (!(inits(head, cells, a, tetrs)))
-		exit(0);/* is it need to free all allocated memory? */
+	{
+		freeing(head, cells, n, a * a);
+		return(1);
+	}
 	if (tracking(head, cells, flags, head[0]))
 	{
 		print_ans(flags, a);
-		exit(0);/* is it need to free all allocated memory? */
+		freeing(head, cells, n, a * a);
+		return (1);
 	}
+	else
+		freeing(head, cells, n, a * a);
+	return (0);
 }
