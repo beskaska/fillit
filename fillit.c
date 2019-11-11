@@ -6,13 +6,13 @@
 /*   By: aimelda <aimelda@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 16:59:46 by aimelda           #+#    #+#             */
-/*   Updated: 2019/11/11 16:05:56 by aimelda          ###   ########.fr       */
+/*   Updated: 2019/11/11 18:38:18 by aimelda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
 
-static void		freeing(t_pos **head, t_cell **cells, int n, int m)
+static int		freeing(t_pos **head, t_cell **cells, int n, int m)
 {
 	t_pos	*tmp_pos;
 	t_cell	*tmp_cell;
@@ -31,20 +31,7 @@ static void		freeing(t_pos **head, t_cell **cells, int n, int m)
 			cells[m] = cells[m]->next;
 			free(tmp_cell);
 		}
-}
-
-static void		print_ans(char *flags, int a)
-{
-	int		i;
-
-	i = 1;
-	while (i <= a * a)
-	{
-		ft_putchar(flags[i]);
-		if (i % a == 0)
-			ft_putchar('\n');
-		i++;
-	}
+	return (1);
 }
 
 static t_pos	*i_pos(t_pos *pos, t_tetr *tetrs, int a, int i)
@@ -54,7 +41,7 @@ static t_pos	*i_pos(t_pos *pos, t_tetr *tetrs, int a, int i)
 		if (!(pos->next = (t_pos*)malloc(sizeof(t_pos))))
 			return (NULL);
 		pos->next->prev = pos;
-		pos	= pos->next;
+		pos = pos->next;
 	}
 	else if (!(pos = (t_pos*)malloc(sizeof(t_pos))))
 		return (NULL);
@@ -95,18 +82,16 @@ static int		i_cell(t_pos *pos, t_cell **cells)
 
 static int		inits(t_pos **head, t_cell **cells, int a, t_tetr *tetrs)
 {
-	int		n;
 	int		i;
 	t_pos	*pos;
 
-	n = a * a;
 	while (tetrs)
 	{
 		pos = NULL;
 		i = -1;
-		while (++i < n - 3)
-			if (tetrs->a[6] * a + i < n &&
-				((int)ft_max(ft_max(tetrs->a[3], tetrs->a[5]), tetrs->a[7]) + i) / a == i / a)
+		while (++i < a * a - 3)
+			if (tetrs->a[6] * a + i < a * a && ((int)ft_max(ft_max(tetrs->a[3],
+			tetrs->a[5]), tetrs->a[7]) + i) / a == i / a)
 			{
 				if (!(pos = i_pos(pos, tetrs, a, i)) || !(i_cell(pos, cells)))
 					return (0);
@@ -127,7 +112,7 @@ int				fillit(int n, int a, t_tetr *tetrs)
 {
 	t_cell	*cells[a * a];
 	char	flags[a * a + 1];
-	t_pos	*head[n];/*test*/
+	t_pos	*head[n];
 	int		i;
 
 	i = 0;
@@ -141,15 +126,11 @@ int				fillit(int n, int a, t_tetr *tetrs)
 		flags[i] = '.';
 	}
 	if (!(inits(head, cells, a, tetrs)))
-	{
-		freeing(head, cells, n, a * a);
-		return(1);
-	}
+		return (freeing(head, cells, n, a * a));
 	if (tracking(head, cells, flags, head[0]))
 	{
-		print_ans(flags, a);
-		freeing(head, cells, n, a * a);
-		return (1);
+		print_square(flags, a);
+		return (freeing(head, cells, n, a * a));
 	}
 	else
 		freeing(head, cells, n, a * a);
